@@ -61,38 +61,62 @@ class Import extends CI_Controller {
             $arrayCount = count($allDataInSheet);
             $flag = 0;
             $createArray = array('first_name', 'contact_no');
+            $column_count= count($createArray);
             $makeArray = array('first_name' => 'first_name', 'contact_no' => 'contact_no');
             $SheetDataKey = array();
-            foreach ($allDataInSheet as $dataInSheet) {
+
+            echo "<pre>";
+            $temp=array();
+            foreach ($allDataInSheet as $rowNo => $dataInSheet) {
+               
                 foreach ($dataInSheet as $key => $value) {
+
+
                     if (in_array(trim($value), $createArray)) {
                         $value = preg_replace('/\s+/', '', $value);
+                    echo $key;
+                    var_dump($value);
                         $SheetDataKey[trim($value)] = $key;
                     } else {
-                        
+
+                        $temp[$rowNo][]=$value;
                     }
                 }
             }
-            $data = array_diff_key($makeArray, $SheetDataKey);
-            if (!empty($data)) {
-                $flag = 1;
-            }
-            if ($flag == 1) {
-                for ($i = 2; $i <= $arrayCount; $i++) {
-                    $addresses = array();
-                    $firstName = $SheetDataKey['First_Name'];
-                    $contactNo = filter_var(trim($allDataInSheet[$i][$contactNo]), FILTER_SANITIZE_STRING);
-                    $fetchData[] = array('first_name' => $firstName,'contact_no' => $contactNo);
-                }              
-                $data['employeeInfo'] = $fetchData;
-                $this->import->setBatchImport($fetchData);
-                $this->import->importData();
-            } else {
-                echo "Please import correct file";
-            }
+
+            for ($i = 2; $i <= $arrayCount; $i++) {
+                $addresses = array();
+                $firstName = $temp[$i][0];
+                $contactNo = $temp[$i][1];
+                
+                $fetchData[] = array('first_name' => $firstName,'contact_no' => $contactNo,'uploaded_file'=>$import_xls_file   );
+            }     
+
+            //save to mysql         
+            $this->db->insert_batch('import', $fetchData); 
+               
+            
         }
-        $this->load->view('import/display', $data);
+        $result_data_excel = $this->import->get_excel();
+        $this->load->view('import/display', array('excel_file_list'=>$result_data_excel));
         
     }
+    function get_excel(){
+        if ( $query->num_rows() > 0 )
+        {
+            $row = $query->row_array();
+            return $row;
+        }
+    }
+
+    function get_file_data()
+    {
+        $file_name=$this->input->post('file_name');
+       // print_r($file_name);
+        $result_data_excel = $this->import->get_one_excel($file_name);
+        echo json_encode($result_data_excel);
+        exit();
+    }
+    
 }
 ?>

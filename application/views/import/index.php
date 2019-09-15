@@ -1,8 +1,7 @@
     <div class="row">
     <div class="col-lg-12">
-        <h1>Lawyers <small>Overview</small></h1>
         <ol class="breadcrumb">
-            <li class="active"><i class="fa fa-list"></i> Import Members</li>
+            <li class="active"><i class="fa fa-list"></i> Import Excel</li>
         </ol>            
     </div>
 </div><!-- /.row -->
@@ -11,7 +10,7 @@ $output = '';
 $output .= form_open_multipart('import/save');
 $output .= '<div class="row">';
 $output .= '<div class="col-lg-12 col-sm-12"><div class="form-group">';
-$output .= form_label('Import Lawyers', 'image');
+$output .= form_label('Import Excel', 'image');
 $data = array(
     'name' => 'userfile',
     'id' => 'userfile',
