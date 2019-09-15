@@ -27,15 +27,17 @@ class Import extends CI_Controller {
         $this->load->library('excel');
         
         if ($this->input->post('importfile')) {
-            $path = './uploads/';
+            $path = './upload/';
 
             $config['upload_path'] = $path;
             $config['allowed_types'] = 'xlsx|xls|jpg|png';
             $config['remove_spaces'] = TRUE;
-            $this->upload->initialize($config);
             $this->load->library('upload', $config);
+            $this->upload->initialize($config);
             if (!$this->upload->do_upload('userfile')) {
                 $error = array('error' => $this->upload->display_errors());
+                print_r($error);
+                die;
             } else {
                 $data = array('upload_data' => $this->upload->data());
             }
@@ -58,8 +60,8 @@ class Import extends CI_Controller {
             
             $arrayCount = count($allDataInSheet);
             $flag = 0;
-            $createArray = array('First_Name', 'Contact_NO');
-            $makeArray = array('First_Name' => 'First_Name', 'Contact_NO' => 'Contact_NO');
+            $createArray = array('first_name', 'contact_no');
+            $makeArray = array('first_name' => 'first_name', 'contact_no' => 'contact_no');
             $SheetDataKey = array();
             foreach ($allDataInSheet as $dataInSheet) {
                 foreach ($dataInSheet as $key => $value) {
@@ -72,8 +74,7 @@ class Import extends CI_Controller {
                 }
             }
             $data = array_diff_key($makeArray, $SheetDataKey);
-           
-            if (empty($data)) {
+            if (!empty($data)) {
                 $flag = 1;
             }
             if ($flag == 1) {
