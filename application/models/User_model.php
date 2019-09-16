@@ -47,4 +47,22 @@ class User_model extends CI_Model {
             return ['status' => FALSE,'data' => FALSE];
         }
     }
+    public function show_students(){
+        $query = $this->db->get('users');
+        $query_result = $query->result();
+        return $query_result;
+    }
+    public function show_student_id($data){
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('user_id', $data);
+        $query = $this->db->get();
+        $result = $query->result();
+        return $result;
+    }
+    // Update Query For Selected Student
+    public function update_student_id1($id,$data){
+        $this->db->where('user_id', $id);
+        $this->db->update('users', $data);
+    }
 }

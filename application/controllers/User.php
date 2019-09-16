@@ -143,14 +143,28 @@ class User extends CI_Controller {
         // var_dump($_SESSION);
         // die('dfd');
         if (empty($this->session->userdata('USER_ID'))) {
-            echo "user";
-            die;
             redirect('user/login');
         }
-
+        $this->load->model('User_model', 'GetUser');
+        $id = $this->session->userdata('USER_ID');
+        $result['students'] = $this->GetUser->show_students();
+        $result['single_student'] = $this->GetUser->show_student_id($id);
         $data['page_title'] = "Welcome to User Panel";
         $this->load->view('_Layout/home/header.php', $data); // Header File
-        $this->load->view("user/panel");
+        $this->load->view("user/panel",$result);
         $this->load->view('_Layout/home/footer.php'); // Footer File
     }
+    function update_student_id1() 
+    {
+        $id= $this->input->post('did');
+        $data = array(
+        'fullname' => $this->input->post('dname'),
+        'mobile' => $this->input->post('dmobile'),
+        );
+        $this->load->model('User_model', 'UpdateUser');
+        $this->UpdateUser->update_student_id1($id,$data);
+        //$this->show_student_id();
+        echo "Data Updated";
+    }
+    
 }
