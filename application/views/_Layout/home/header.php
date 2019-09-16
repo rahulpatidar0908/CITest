@@ -24,6 +24,7 @@
                 <?php if (!empty($this->session->userdata('USER_ID')) && $this->session->userdata('USER_ID') > 0) { ?>
                     <!-- User isLogin -->
                     <a href="<?= base_url('User/Panel') ?>" class="btn btn-primary my-2 my-sm-0">User Panel</a> &nbsp;
+                    <a href="<?= base_url('Import/get_excel_list') ?>" class="btn btn-primary my-2 my-sm-0">Excel Files</a> &nbsp;
                     <a href="<?= base_url('User/logout') ?>" class="btn btn-danger my-2 my-sm-0">Logout</a>
                 <?php } else { ?>
                     <!-- User not Login -->

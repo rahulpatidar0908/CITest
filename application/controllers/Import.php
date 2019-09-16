@@ -101,6 +101,12 @@ class Import extends CI_Controller {
         $this->load->view('import/display', array('excel_file_list'=>$result_data_excel));
         
     }
+    function get_excel_list(){
+        $result_data_excel = $this->import->get_excel();
+        $this->load->model('Import_model', 'ImportData');
+        $resultExcel = $this->ImportData->get_excel();
+        $this->load->view('import/display', array('excel_file_list'=>$resultExcel));
+    }
     function get_excel(){
         if ( $query->num_rows() > 0 )
         {
