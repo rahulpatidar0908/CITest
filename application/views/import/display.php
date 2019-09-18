@@ -17,7 +17,12 @@ console.log(file_name);
     // Callback handler that will be called on success
     request.done(function (response, textStatus, jqXHR){
         // Log a message to the console
-        console.log("Hooray, it worked!",response);
+        $('#info').html('');
+        $.each(response, function(k, v) {
+            /// do stuff
+            $('#info').append('<tr><td>'+v.first_name+'</td> '+'<td>'+v.contact_no+'</td>');
+            console.log(v.first_name);
+        });
     });
 
     // Callback handler that will be called on failure
@@ -33,6 +38,29 @@ console.log(file_name);
 }
 
 </script>
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: left;    
+}
+</style>
+<div>
+    
+        <table width="100%">
+            <tr>
+                <th>Name</th>
+                <th colspan="2">Telephone</th>
+            </tr>
+            <tr id="info">
+
+            </tr>
+        </table>
+    
+</div>
 <div class="table-responsive">
     <div class="col-md-6">
         <ul>
@@ -45,12 +73,12 @@ console.log(file_name);
     </div>
     <div class="col-md-6">
     <table class="table table-hover tablesorter">
-        <thead>
+        <!-- <thead>
             <tr>
                 <th class="header">First Name</th>
                 <th class="header">Contact Name</th>
             </tr>
-        </thead>
+        </thead> -->
         <tbody id="fileData">
             <?php
             if (isset($employeeInfo) && !empty($employeeInfo)) {
